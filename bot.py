@@ -25,7 +25,7 @@ Mixture of Agents (MoA) is a novel approach that leverages the collective streng
 
 This demo uses the following LLMs as reference models, then passes the results to the aggregate model for the final response:
 - Qwen/Qwen2-72B-Instruct
-- Qwen/Qwen1.5-72B-Chat
+- Qwen/Qwen2.5-72B-Instruct-Turbo
 - mistralai/Mixtral-8x22B-Instruct-v0.1
 - databricks/dbrx-instruct
 
@@ -33,7 +33,7 @@ This demo uses the following LLMs as reference models, then passes the results t
 
 default_reference_models = [
     "Qwen/Qwen2-72B-Instruct",
-    "Qwen/Qwen1.5-72B-Chat",
+    "Qwen/Qwen2.5-72B-Instruct-Turbo",
     "mistralai/Mixtral-8x22B-Instruct-v0.1",
     "databricks/dbrx-instruct",
 ]

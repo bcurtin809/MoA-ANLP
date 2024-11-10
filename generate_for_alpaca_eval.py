@@ -90,7 +90,7 @@ def main(
         reference_models = reference_models.split(",")
 
     eval_set = datasets.load_dataset(
-        "tatsu-lab/alpaca_eval", "alpaca_eval_gpt4_baseline", trust_remote_code=True
+        "tatsu-lab/alpaca_eval", "alpaca_eval_gpt4_baseline"
     )["eval"]
     eval_set = eval_set.remove_columns(["output", "generator"])
 

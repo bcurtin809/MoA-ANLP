@@ -9,7 +9,7 @@ async_client = AsyncTogether(api_key=os.environ.get("TOGETHER_API_KEY"))
 user_prompt = "What are 3 fun things to do in SF?"
 reference_models = [
     "Qwen/Qwen2-72B-Instruct",
-    "Qwen/Qwen1.5-72B-Chat",
+    "Qwen/Qwen2.5-72B-Instruct-Turbo",
     "mistralai/Mixtral-8x22B-Instruct-v0.1",
     "databricks/dbrx-instruct",
 ]
