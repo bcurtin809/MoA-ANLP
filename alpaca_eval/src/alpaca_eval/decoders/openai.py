@@ -81,7 +81,7 @@ def openai_completions(
     system, and  02 in hexadecimal numeral system.', '4']
     """
     num_procs = num_procs or constants.OPENAI_MAX_CONCURRENCY
-
+    model_name = "gpt-4o-mini"
     n_examples = len(prompts)
     if n_examples == 0:
         logging.info("No samples to annotate.")

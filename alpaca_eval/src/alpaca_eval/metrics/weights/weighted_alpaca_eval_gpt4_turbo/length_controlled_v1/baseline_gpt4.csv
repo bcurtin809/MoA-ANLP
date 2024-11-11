@@ -1,0 +1,3 @@
+,np.tanh(std_delta_len),instruction_difficulty,not_gamed_baseline.astype(float)
+Together-MoA,-1.2315226321265087,0.2451761893240175,2.5274531440551522
+Qwen/Qwen2.5-72B-Instruct-Turbo-together,-2.0955312149839247,0.3651761857770437,2.0681419504593137
