@@ -155,7 +155,7 @@ def oai_moderation(text, custom_thresholds=None):
     """
     import openai
 
-    client = openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    client = openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"], base_url=os.environ.get("OPENAI_API_BASE") or "https://api.openai.com/v1")
 
     # default to true to be conservative
     flagged = True

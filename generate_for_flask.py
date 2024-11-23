@@ -8,7 +8,8 @@ from loguru import logger
 from utils import (
     generate_together,
     generate_openai,
-    generate_with_references,
+    generate_with_aggregated_reference,
+    generate_aggregated_reference,
     DEBUG,
 )
 
@@ -36,7 +37,7 @@ def process_fn(
 
     if len(references) == 0 and len(reference_models) > 0:
 
-        prev_references = []
+        prev_references = ""
 
         for i_round in range(rounds):
 
@@ -49,7 +50,7 @@ def process_fn(
 
             for reference_model in reference_models:
 
-                reference = generate_with_references(
+                reference = generate_with_aggregated_reference(
                     model=reference_model,
                     messages=messages,
                     references=prev_references,
@@ -61,17 +62,20 @@ def process_fn(
                 if reference is not None:
 
                     references.append(reference)
+                    
+            prev_references = generate_aggregated_reference(
+                model=model,
+                messages=messages,
+                references=references,
+                generate_fn=generate_fn,
+            )
 
-            if i_round < rounds - 1:
+            references = []
 
-                prev_references = references
-
-                references = []
-
-    output = generate_with_references(
+    output = generate_with_aggregated_reference(
         model=model,
         messages=messages,
-        references=references,
+        references=prev_references,
         generate_fn=generate_fn,
     )
 

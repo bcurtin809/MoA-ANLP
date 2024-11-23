@@ -54,7 +54,8 @@ import openai
 from utils import (
     generate_together,
     generate_openai,
-    generate_with_references,
+    generate_with_aggregated_reference,
+    generate_aggregated_reference,
     DEBUG,
 )
 
@@ -105,7 +106,7 @@ def get_answer(
 
             if len(reference_models) > 0:
 
-                prev_references = []
+                prev_references = ""
 
                 for i_round in range(rounds):
 
@@ -118,7 +119,7 @@ def get_answer(
 
                     for reference_model in reference_models:
 
-                        reference = generate_with_references(
+                        reference = generate_with_aggregated_reference(
                             model=reference_model,
                             messages=messages,
                             references=prev_references,
@@ -126,24 +127,27 @@ def get_answer(
                             max_tokens=max_tokens,
                             generate_fn=generate_fn,
                         )
-
+                        
                         if reference is not None:
-
+                            
                             references.append(reference)
 
-                    if i_round < rounds - 1:
+                    prev_references = generate_aggregated_reference(
+                        model=model,
+                        messages=messages,
+                        references=references,
+                        generate_fn=generate_fn,
+                    )
 
-                        prev_references = references
+                    references = []
 
-                        references = []
-
-            output = generate_with_references(
+            output = generate_with_aggregated_reference(
                 model=model,
                 messages=messages,
                 max_tokens=max_tokens,
                 temperature=temperature,
                 generate_fn=generate_fn,
-                references=references,
+                references=prev_references,
             ).strip()
 
             messages.append(

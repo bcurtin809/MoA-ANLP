@@ -105,6 +105,7 @@ def generate_openai(
 
     client = openai.OpenAI(
         api_key=os.environ.get("OPENAI_API_KEY"),
+        base_url=os.environ.get("OPENAI_API_BASE")
     )
 
     for sleep_time in [1, 2, 4, 8, 16, 32]:
@@ -172,6 +173,94 @@ def generate_with_references(
     if len(references) > 0:
 
         messages = inject_references_to_messages(messages, references)
+
+    return generate_fn(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+    
+def aggregate_references(
+    messages,
+    references,
+):
+
+    messages = copy.deepcopy(messages)
+
+    system = f"""You have been provided with a set of responses from various open-source models to the latest user query. Your task is to synthesize these responses into a single, high-quality response. It is crucial to critically evaluate the information provided in these responses, recognizing that some of it may be biased or incorrect. Your response should not simply replicate the given answers but should offer a refined, accurate, and comprehensive reply to the instruction. Ensure your response is well-structured, coherent, and adheres to the highest standards of accuracy and reliability.
+
+Responses from models:"""
+
+    for i, reference in enumerate(references):
+
+        system += f"\n{i+1}. {reference}"
+
+    if messages[0]["role"] == "system":
+
+        messages[0]["content"] += "\n\n" + system
+
+    else:
+
+        messages = [{"role": "system", "content": system}] + messages
+
+    return messages
+
+
+def inject_aggregated_reference_to_messages(
+    messages,
+    aggregated_reference,
+):
+
+    messages = copy.deepcopy(messages)
+
+    system = f"""You have been provided with an aggregated response from various open-source models to the latest user query. Your task is to use this aggregated response to generate a single, high-quality response. It is crucial to critically evaluate this aggregated response, recognizing that some of it may be biased or incorrect. Your response should not simply replicate the given answers but should offer a refined and accurate reply to the instruction. Ensure your response is well-structured, coherent, concise and adheres to the highest standards of accuracy and reliability."""
+
+    system += f"{aggregated_reference}"
+
+    if messages[0]["role"] == "system":
+
+        messages[0]["content"] += "\n\n" + system
+
+    else:
+
+        messages = [{"role": "system", "content": system}] + messages
+
+    return messages
+
+
+def generate_with_aggregated_reference(
+    model,
+    messages,
+    references=[],
+    max_tokens=2048,
+    temperature=0.7,
+    generate_fn=generate_together,
+):
+
+    if len(references) > 0:
+
+        messages = inject_aggregated_reference_to_messages(messages, references)
+
+    return generate_fn(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+    
+def generate_aggregated_reference(
+    model,
+    messages,
+    references=[],
+    max_tokens=2048,
+    temperature=0.7,
+    generate_fn=generate_together,
+):
+
+    if len(references) > 0:
+
+        messages = aggregate_references(messages, references)
 
     return generate_fn(
         model=model,

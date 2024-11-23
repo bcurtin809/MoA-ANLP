@@ -148,6 +148,7 @@ def call_and_write(api_key: str, item: dict, output_path: str, fail_path: str):
 def completion_with_backoff(api_key, **kwargs):
     client = openai.OpenAI(
         api_key=api_key,
+        base_url=os.environ.get("OPENAI_API_BASE") or "https://api.openai.com/v1"
     )
     return client.chat.completions.create(**kwargs)
 

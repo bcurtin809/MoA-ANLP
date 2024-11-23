@@ -271,7 +271,7 @@ def openai_assistant_api_stream_iter(
     import base64
 
     api_key = api_key or os.environ["OPENAI_API_KEY"]
-    client = openai.OpenAI(base_url="https://api.openai.com/v1", api_key=api_key)
+    client = openai.OpenAI(base_url=os.environ.get("OPENAI_API_BASE") or "https://api.openai.com/v1", api_key=api_key)
 
     if state.oai_thread_id is None:
         logger.info("==== create thread ====")
