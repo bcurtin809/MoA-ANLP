@@ -64,7 +64,13 @@ def process_fn(
                     references.append(reference)
                     
             prev_references = generate_aggregated_reference(
-                model=model,
+                #model=model,
+                #TODO change model to the aggregated model we want
+                # Model Links https://api.together.xyz/models
+                # test 1 (larger model) = META LLAMA 3 8B INSTRUCT TURBO - meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
+                # test 2 (control for our fine-tune)= META LLAMA 3.2 3B INSTRUCT TURBO - meta-llama/Llama-3.2-3B-Instruct-Turbo-lora
+                # test 3 (our fine-tuned model)= our llama 3.2 3B Fine-Tuned
+                model="meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
                 messages=messages,
                 references=references,
                 generate_fn=generate_fn,
