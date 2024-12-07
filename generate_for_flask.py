@@ -34,10 +34,10 @@ def process_fn(
     messages = [{"role": "user", "content": item["text"]}]
 
     references = item.get("references", [])
+    
+    prev_references = ""
 
     if len(references) == 0 and len(reference_models) > 0:
-
-        prev_references = ""
 
         for i_round in range(rounds):
 
