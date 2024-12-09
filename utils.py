@@ -237,10 +237,10 @@ def generate_with_aggregated_reference(
     temperature=0.7,
     generate_fn=generate_together,
 ):
+    if references:
+        if len(references) > 0:
 
-    if len(references) > 0:
-
-        messages = inject_aggregated_reference_to_messages(messages, references)
+            messages = inject_aggregated_reference_to_messages(messages, references)
 
     return generate_fn(
         model=model,
@@ -257,10 +257,10 @@ def generate_aggregated_reference(
     temperature=0.7,
     generate_fn=generate_together,
 ):
+    if references:
+        if len(references) > 0:
 
-    if len(references) > 0:
-
-        messages = aggregate_references(messages, references)
+            messages = aggregate_references(messages, references)
 
     return generate_fn(
         model=model,
